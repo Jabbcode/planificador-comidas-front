@@ -1,6 +1,5 @@
 import Header from './Header'
 import BottomNav from './BottomNav'
-import FabAdd from './FabAdd'
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -10,7 +9,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <BottomNav />
-      <FabAdd />
     </div>
   )
 }

@@ -14,7 +14,7 @@ interface Props {
 export default function ConfirmDialog({ open, title, description, confirmLabel = 'Eliminar', loading = false, onConfirm, onCancel }: Props) {
   return (
     <Dialog open={open} onOpenChange={loading ? undefined : onCancel}>
-      <DialogContent className="mx-5 w-[calc(100%-2.5rem)] rounded-2xl">
+      <DialogContent className="rounded-2xl">
         <DialogHeader>
           <DialogTitle className="text-headline-md">{title}</DialogTitle>
         </DialogHeader>
