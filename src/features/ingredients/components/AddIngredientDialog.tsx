@@ -57,7 +57,7 @@ export default function AddIngredientDialog({ open, onClose, onAdd, onEdit, ingr
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="mx-5 w-[calc(100%-2.5rem)] rounded-2xl">
+      <DialogContent className="rounded-2xl">
         <DialogHeader>
           <DialogTitle className="text-body-lg font-semibold">
             {isEditing ? 'Editar ingrediente' : 'Añadir ingrediente'}

@@ -33,7 +33,7 @@ export default function GenerateRecipeSheet({ open, onClose, onGenerated }: Prop
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="mx-5 w-[calc(100%-2.5rem)] rounded-2xl">
+      <DialogContent className="rounded-2xl">
         <DialogHeader>
           <DialogTitle className="text-body-lg font-semibold flex items-center gap-2">
             <Sparkles size={16} className="text-primary" />
