@@ -34,12 +34,12 @@ export default function IngredientItem({ ingredient, onToggle, onEdit, onDelete 
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <span className="text-body-sm font-medium text-on-surface truncate">{ingredient.name}</span>
           {ingredient.category && (
-            <span className="w-fit rounded-full bg-surface-container px-2 py-0.5 text-label-sm text-on-surface-variant">
+            <span className="w-fit rounded-full bg-surface-container px-2 py-0.5 text-label-sm text-on-surface-variant uppercase">
               {ingredient.category}
             </span>
           )}
         </div>
-        <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-label-sm font-semibold tracking-wide', PREFERENCE_CLASS[ingredient.preference])}>
+        <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-label-sm font-semibold tracking-wide uppercase', PREFERENCE_CLASS[ingredient.preference])}>
           {PREFERENCE_LABEL[ingredient.preference]}
         </span>
       </button>
