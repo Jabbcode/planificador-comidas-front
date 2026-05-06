@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Manrope } from 'next/font/google'
+import { Toaster } from 'sonner'
 import AppShell from '@/components/layout/AppShell'
 import './globals.css'
 
@@ -27,6 +28,7 @@ export default function RootLayout({
     <html lang="es" className={`${inter.variable} ${manrope.variable} h-full antialiased`}>
       <body className="h-full bg-background text-on-surface">
         <AppShell>{children}</AppShell>
+        <Toaster position="top-center" richColors closeButton />
       </body>
     </html>
   )

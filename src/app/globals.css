@@ -194,4 +194,24 @@
     font-weight: 500;
     line-height: 0.875rem;  /* 14px */
   }
+  .text-label-xs {
+    font-family: var(--font-inter);
+    font-size: 0.5625rem;   /* 9px */
+    font-weight: 500;
+    line-height: 0.75rem;   /* 12px */
+  }
+}
+
+/* Utility-layer overrides — garantizan precedencia sobre estilos heredados */
+@layer utilities {
+  .text-label-sm {
+    font-size: 0.625rem;    /* 10px */
+    font-weight: 500;
+    line-height: 0.875rem;
+  }
+  .text-label-xs {
+    font-size: 0.5625rem;   /* 9px */
+    font-weight: 500;
+    line-height: 0.75rem;
+  }
 }
