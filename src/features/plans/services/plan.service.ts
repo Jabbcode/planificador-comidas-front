@@ -8,4 +8,5 @@ export const planService = {
   updateMeal: (mealId: string, data: UpdateMealInput) =>
     api.put<PlanMeal>(`/plans/meals/${mealId}`, data),
   swapMeal: (mealId: string) => api.post<PlanMeal>(`/plans/meals/${mealId}/swap`, {}),
+  deleteMeal: (mealId: string) => api.delete<void>(`/plans/meals/${mealId}`),
 }

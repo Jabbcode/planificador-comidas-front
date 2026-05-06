@@ -72,5 +72,17 @@ export function usePlan() {
     }
   }, [])
 
-  return { plan, loading, error, generating, refreshing, swappingIds, generate, refresh, toggleLock, swap }
+  const deleteMeal = useCallback(async (mealId: string) => {
+    setError(null)
+    try {
+      await planService.deleteMeal(mealId)
+      setPlan(prev =>
+        prev ? { ...prev, meals: prev.meals.filter(m => m.id !== mealId) } : prev
+      )
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Error al eliminar la comida')
+    }
+  }, [])
+
+  return { plan, loading, error, generating, refreshing, swappingIds, generate, refresh, toggleLock, swap, deleteMeal }
 }

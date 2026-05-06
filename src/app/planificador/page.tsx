@@ -12,7 +12,7 @@ function getTodayIndex() {
 }
 
 export default function PlanificadorPage() {
-  const { plan, loading, error, generating, refreshing, swappingIds, generate, refresh, toggleLock, swap } = usePlan()
+  const { plan, loading, error, generating, refreshing, swappingIds, generate, refresh, toggleLock, swap, deleteMeal } = usePlan()
   const todayIndex = getTodayIndex()
   const [selectedDay, setSelectedDay] = useState(todayIndex)
 
@@ -113,6 +113,7 @@ export default function PlanificadorPage() {
               swapping={meal ? swappingIds.has(meal.id) : false}
               onToggleLock={() => meal && toggleLock(meal)}
               onSwap={() => meal && swap(meal.id)}
+              onDelete={() => meal && deleteMeal(meal.id)}
             />
           )
         })}

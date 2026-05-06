@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Lock, LockOpen, RefreshCw } from 'lucide-react'
+import { Lock, LockOpen, RefreshCw, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { MEAL_LABEL, MEAL_COLOR } from '@/features/recipes/constants'
 import type { PlanMeal } from '../types'
@@ -12,9 +12,10 @@ interface Props {
   swapping: boolean
   onToggleLock: () => void
   onSwap: () => void
+  onDelete: () => void
 }
 
-export default function MealSlot({ meal, mealType, swapping, onToggleLock, onSwap }: Props) {
+export default function MealSlot({ meal, mealType, swapping, onToggleLock, onSwap, onDelete }: Props) {
   return (
     <div className="rounded-2xl bg-surface p-4 shadow-sm flex flex-col gap-3">
       <div className="flex items-center justify-between">
@@ -37,6 +38,14 @@ export default function MealSlot({ meal, mealType, swapping, onToggleLock, onSwa
               className="text-on-surface-variant hover:text-on-surface transition-colors disabled:opacity-40"
             >
               <RefreshCw size={16} className={cn(swapping && 'animate-spin')} />
+            </button>
+            <button
+              onClick={onDelete}
+              disabled={meal.locked}
+              aria-label="Eliminar receta del plan"
+              className="text-on-surface-variant hover:text-error transition-colors disabled:opacity-40"
+            >
+              <Trash2 size={16} />
             </button>
           </div>
         )}
