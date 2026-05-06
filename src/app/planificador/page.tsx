@@ -39,6 +39,10 @@ export default function PlanificadorPage() {
     plan?.meals.find(m => m.dayOfWeek === dayOfWeek && m.mealType === mealType)
 
   const busy = generating || refreshing
+  const hasUnlocked = (plan?.meals ?? []).some(m => !m.locked)
+  const hasEmptySlots = (plan?.meals.length ?? 0) < 21
+  const canGenerate = hasUnlocked || hasEmptySlots
+  const canRefresh = hasUnlocked
 
   return (
     <div className="flex flex-col gap-5 px-5 py-6">
@@ -47,7 +51,7 @@ export default function PlanificadorPage() {
         <div className="flex gap-2">
           <button
             onClick={refresh}
-            disabled={busy}
+            disabled={busy || !canRefresh}
             className="flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1.5 text-label-sm font-semibold text-on-surface-variant disabled:opacity-50 transition-opacity"
           >
             <RefreshCw size={14} className={cn(refreshing && 'animate-spin')} />
@@ -55,10 +59,13 @@ export default function PlanificadorPage() {
           </button>
           <button
             onClick={generate}
-            disabled={busy}
+            disabled={busy || !canGenerate}
             className="flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-label-sm font-semibold text-on-primary disabled:opacity-50 transition-opacity"
           >
-            <Sparkles size={14} />
+            {generating
+              ? <RefreshCw size={14} className="animate-spin" />
+              : <Sparkles size={14} />
+            }
             Generar
           </button>
         </div>

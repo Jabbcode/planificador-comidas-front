@@ -49,9 +49,9 @@ export function usePlan() {
 
   const toggleLock = useCallback(async (meal: PlanMeal) => {
     try {
-      const updated = await planService.updateMeal(meal.id, { locked: !meal.locked })
+      await planService.updateMeal(meal.id, { locked: !meal.locked })
       setPlan(prev =>
-        prev ? { ...prev, meals: prev.meals.map(m => m.id === updated.id ? updated : m) } : prev
+        prev ? { ...prev, meals: prev.meals.map(m => m.id === meal.id ? { ...m, locked: !meal.locked } : m) } : prev
       )
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Error al actualizar la comida')
@@ -62,10 +62,9 @@ export function usePlan() {
     setSwappingIds(prev => new Set(prev).add(mealId))
     setError(null)
     try {
-      const updated = await planService.swapMeal(mealId)
-      setPlan(prev =>
-        prev ? { ...prev, meals: prev.meals.map(m => m.id === updated.id ? updated : m) } : prev
-      )
+      await planService.swapMeal(mealId)
+      const refreshed = await planService.getCurrent()
+      setPlan(refreshed)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Error al cambiar la receta')
     } finally {
