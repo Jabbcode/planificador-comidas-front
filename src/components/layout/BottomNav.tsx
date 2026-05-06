@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, CalendarDays, ChefHat, ShoppingCart } from 'lucide-react'
+import { LayoutDashboard, CalendarDays, ChefHat, Heart, ShoppingCart } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
-  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/planificador', label: 'Planificador', icon: CalendarDays },
+  { href: '/', label: 'Inicio', icon: LayoutDashboard },
+  { href: '/planificador', label: 'Plan', icon: CalendarDays },
   { href: '/recetas', label: 'Recetas', icon: ChefHat },
+  { href: '/preferencias', label: 'Gustos', icon: Heart },
   { href: '/compras', label: 'Compras', icon: ShoppingCart },
 ] as const
 
@@ -23,7 +24,7 @@ export default function BottomNav() {
           <Link
             key={href}
             href={href}
-            className="relative flex flex-col items-center gap-0.5 px-4 py-1"
+            className="relative flex flex-col items-center gap-0.5 px-2 py-1"
             aria-label={label}
           >
             <Icon
@@ -36,7 +37,7 @@ export default function BottomNav() {
             />
             <span
               className={cn(
-                'text-label-sm transition-colors',
+                'text-label-xs transition-colors',
                 isActive ? 'text-primary' : 'text-on-surface-variant'
               )}
             >
