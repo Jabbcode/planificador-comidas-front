@@ -11,7 +11,7 @@ import RecipeCard from '@/features/recipes/components/RecipeCard'
 import MealTypeFilter from '@/features/recipes/components/MealTypeFilter'
 import GenerateRecipeSheet from '@/features/recipes/components/GenerateRecipeSheet'
 import type { MealTypeFilterValue } from '@/features/recipes/components/MealTypeFilter'
-import type { MealType, Recipe } from '@/features/recipes/types'
+import type { Recipe } from '@/features/recipes/types'
 
 export default function RecetasPage() {
   const router = useRouter()
@@ -19,12 +19,15 @@ export default function RecetasPage() {
   const [search, setSearch] = useState('')
   const [generateOpen, setGenerateOpen] = useState(false)
 
-  const mealType = filter === 'ALL' ? undefined : filter as MealType
-  const { recipes, loading, error, reload } = useRecipes(mealType)
+  const { recipes, loading, error, reload } = useRecipes()
 
   const filtered = useMemo(() =>
-    recipes.filter(r => r.name.toLowerCase().includes(search.toLowerCase())),
-    [recipes, search]
+    recipes.filter(r => {
+      const matchesMeal = filter === 'ALL' || r.mealType === filter
+      const matchesSearch = r.name.toLowerCase().includes(search.toLowerCase())
+      return matchesMeal && matchesSearch
+    }),
+    [recipes, filter, search]
   )
 
   const handleGenerated = (recipe: Recipe) => {
@@ -63,6 +66,14 @@ export default function RecetasPage() {
         </div>
 
         <MealTypeFilter value={filter} onChange={setFilter} />
+
+        {!loading && (
+          <span className="w-fit rounded-full bg-surface-container px-2.5 py-1 text-label-sm font-semibold text-on-surface-variant">
+            {filtered.length < recipes.length
+              ? `${filtered.length} de ${recipes.length} recetas`
+              : `${recipes.length} ${recipes.length === 1 ? 'receta' : 'recetas'}`}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col gap-3 pb-6">

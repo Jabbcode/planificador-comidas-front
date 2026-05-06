@@ -99,6 +99,14 @@ export default function PreferenciasPage() {
             </button>
           ))}
         </div>
+
+        {!loading && (
+          <span className="w-fit rounded-full bg-surface-container px-2.5 py-1 text-label-sm font-semibold text-on-surface-variant">
+            {filtered.length < ingredients.length
+              ? `${filtered.length} de ${ingredients.length} ingredientes`
+              : `${ingredients.length} ${ingredients.length === 1 ? 'ingrediente' : 'ingredientes'}`}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col gap-2 pb-6">
