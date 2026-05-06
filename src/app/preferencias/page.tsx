@@ -21,6 +21,7 @@ export default function PreferenciasPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingIngredient, setEditingIngredient] = useState<Ingredient | undefined>()
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
+  const [deleteLoading, setDeleteLoading] = useState(false)
 
   const filtered = useMemo(() => {
     return ingredients.filter(i => {
@@ -34,12 +35,15 @@ export default function PreferenciasPage() {
 
   const handleDeleteConfirm = async () => {
     if (!pendingDeleteId) return
-    setPendingDeleteId(null)
+    setDeleteLoading(true)
     try {
       await removeIngredient(pendingDeleteId)
       toast.success('Ingrediente eliminado')
+      setPendingDeleteId(null)
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'No se pudo eliminar el ingrediente.')
+    } finally {
+      setDeleteLoading(false)
     }
   }
 
@@ -141,6 +145,7 @@ export default function PreferenciasPage() {
         open={!!pendingDeleteId}
         title="¿Eliminar ingrediente?"
         description="Esta acción no se puede deshacer."
+        loading={deleteLoading}
         onConfirm={handleDeleteConfirm}
         onCancel={() => setPendingDeleteId(null)}
       />
