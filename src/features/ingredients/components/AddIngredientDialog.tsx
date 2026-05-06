@@ -1,10 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import { ingredientFormSchema, type IngredientFormValues } from '../schemas'
 import type { Ingredient, CreateIngredientInput, UpdateIngredientInput, Preference } from '../types'
 
 const PREFERENCES: { value: Preference; label: string; activeClass: string }[] = [
@@ -24,45 +27,32 @@ interface Props {
 export default function AddIngredientDialog({ open, onClose, onAdd, onEdit, ingredient }: Props) {
   const isEditing = !!ingredient
 
-  const [name, setName] = useState('')
-  const [category, setCategory] = useState('')
-  const [preference, setPreference] = useState<Preference>('NEUTRAL')
-  const [loading, setLoading] = useState(false)
+  const { register, control, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<IngredientFormValues>({
+    resolver: zodResolver(ingredientFormSchema),
+    defaultValues: { name: '', category: '', preference: 'NEUTRAL' },
+  })
 
   useEffect(() => {
-    if (ingredient) {
-      setName(ingredient.name)
-      setCategory(ingredient.category ?? '')
-      setPreference(ingredient.preference)
-    } else {
-      setName('')
-      setCategory('')
-      setPreference('NEUTRAL')
+    if (open) {
+      reset(ingredient
+        ? { name: ingredient.name, category: ingredient.category ?? '', preference: ingredient.preference }
+        : { name: '', category: '', preference: 'NEUTRAL' }
+      )
     }
-  }, [ingredient, open])
+  }, [open, ingredient, reset])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!name.trim()) return
-    setLoading(true)
-    try {
-      if (isEditing && onEdit && ingredient) {
-        await onEdit(ingredient.id, {
-          name: name.trim(),
-          category: category.trim() || undefined,
-          preference,
-        })
-      } else if (onAdd) {
-        await onAdd({
-          name: name.trim(),
-          category: category.trim() || undefined,
-          preference,
-        })
-      }
-      onClose()
-    } finally {
-      setLoading(false)
+  const onSubmit = async (values: IngredientFormValues) => {
+    const data = {
+      name: values.name.trim(),
+      category: values.category?.trim() || undefined,
+      preference: values.preference,
     }
+    if (isEditing && onEdit && ingredient) {
+      await onEdit(ingredient.id, data)
+    } else if (onAdd) {
+      await onAdd(data)
+    }
+    onClose()
   }
 
   return (
@@ -73,40 +63,51 @@ export default function AddIngredientDialog({ open, onClose, onAdd, onEdit, ingr
             {isEditing ? 'Editar ingrediente' : 'Añadir ingrediente'}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3 pt-1">
-          <Input
-            placeholder="Nombre del ingrediente"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            required
-            autoFocus
-            className="text-body-sm h-9"
-          />
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 pt-1">
+          <div className="flex flex-col gap-1">
+            <Input
+              placeholder="Nombre del ingrediente"
+              {...register('name')}
+              autoFocus
+              className={cn('text-body-sm h-9', errors.name && 'border-error')}
+            />
+            {errors.name && <p className="text-label-sm text-error">{errors.name.message}</p>}
+          </div>
+
           <Input
             placeholder="Categoría (opcional)"
-            value={category}
-            onChange={e => setCategory(e.target.value)}
+            {...register('category')}
             className="text-body-sm h-9"
           />
-          <div className="flex gap-2">
-            {PREFERENCES.map(p => (
-              <button
-                key={p.value}
-                type="button"
-                onClick={() => setPreference(p.value)}
-                className={cn(
-                  'flex-1 rounded-full py-1.5 text-label-sm font-semibold transition-all',
-                  preference === p.value
-                    ? p.activeClass
-                    : 'bg-surface-container-low text-on-surface-variant'
-                )}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
-          <Button type="submit" disabled={loading || !name.trim()} className="rounded-full h-9 text-body-sm">
-            {loading ? (isEditing ? 'Guardando...' : 'Añadiendo...') : (isEditing ? 'Guardar cambios' : 'Añadir')}
+
+          <Controller
+            name="preference"
+            control={control}
+            render={({ field }) => (
+              <div className="flex gap-2">
+                {PREFERENCES.map(p => (
+                  <button
+                    key={p.value}
+                    type="button"
+                    onClick={() => field.onChange(p.value)}
+                    className={cn(
+                      'flex-1 rounded-full py-1.5 text-label-sm font-semibold transition-all',
+                      field.value === p.value
+                        ? p.activeClass
+                        : 'bg-surface-container-low text-on-surface-variant'
+                    )}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          />
+
+          <Button type="submit" disabled={isSubmitting} className="rounded-full h-9 text-body-sm">
+            {isSubmitting
+              ? (isEditing ? 'Guardando...' : 'Añadiendo...')
+              : (isEditing ? 'Guardar cambios' : 'Añadir')}
           </Button>
         </form>
       </DialogContent>
