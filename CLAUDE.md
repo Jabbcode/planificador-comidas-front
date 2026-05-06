@@ -6,6 +6,7 @@ App web **mobile-first** de planificación de comidas semanal. Un solo usuario, 
 
 - **Next.js 16** (App Router) + React 19 + TypeScript 5
 - **Tailwind CSS v4** + shadcn/ui + Base UI
+- **react-hook-form** + **zod** + **@hookform/resolvers** para formularios y validación
 - **lucide-react** para iconos
 - `clsx` + `tailwind-merge` + `class-variance-authority` para estilos condicionales
 
@@ -68,7 +69,15 @@ npm run lint     # ESLint
 ## Convenciones
 
 - **No hay autenticación** — todas las rutas son accesibles.
-- Cada feature vive en `src/features/<dominio>/` con sus propios componentes, hooks y types.
+- Cada feature vive en `src/features/<dominio>/` con:
+  - `components/` — UI específica del dominio
+  - `hooks/` — hooks de datos y formularios
+  - `services/` — llamadas a la API
+  - `types.ts` — interfaces y tipos
+  - `constants.ts` — labels, colores, opciones de select
+  - `utils.ts` — helpers puros (parse, serialize, build payload)
+  - `schemas.ts` — schemas zod + tipos inferidos para formularios
+- Formularios usan **react-hook-form** con `zodResolver`. Campos numéricos se mantienen como `string` en el form y se convierten en `buildXPayload` dentro de `utils.ts`.
 - Componentes `ui/` son genéricos y reutilizables; los de `features/` son específicos del dominio.
 - Mobile-first: diseñar primero para 375px, luego escalar.
 - No añadir comentarios salvo que el "por qué" no sea obvio.
