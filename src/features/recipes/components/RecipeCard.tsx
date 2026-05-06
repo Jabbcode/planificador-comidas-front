@@ -1,19 +1,8 @@
 import Link from 'next/link'
 import { Clock, Users, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { MEAL_LABEL, MEAL_COLOR } from '../constants'
 import type { Recipe } from '../types'
-
-const MEAL_LABEL: Record<string, string> = {
-  BREAKFAST: 'Desayuno',
-  LUNCH: 'Almuerzo',
-  DINNER: 'Cena',
-}
-
-const MEAL_COLOR: Record<string, string> = {
-  BREAKFAST: 'bg-amber-100 text-amber-700',
-  LUNCH: 'bg-green-100 text-green-700',
-  DINNER: 'bg-indigo-100 text-indigo-700',
-}
 
 interface Props {
   recipe: Recipe

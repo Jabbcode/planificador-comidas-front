@@ -7,13 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { useGenerateRecipe } from '../hooks/useGenerateRecipe'
+import { MEAL_OPTIONS } from '../constants'
 import type { MealType, Recipe } from '../types'
-
-const MEAL_OPTIONS: { value: MealType; label: string }[] = [
-  { value: 'BREAKFAST', label: 'Desayuno' },
-  { value: 'LUNCH', label: 'Almuerzo' },
-  { value: 'DINNER', label: 'Cena' },
-]
 
 interface Props {
   open: boolean

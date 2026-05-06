@@ -10,18 +10,7 @@ import ConfirmDialog from '@/components/ui/ConfirmDialog'
 import { cn } from '@/lib/utils'
 import { useRecipe } from '@/features/recipes/hooks/useRecipe'
 import { recipeService } from '@/features/recipes/services/recipe.service'
-
-const MEAL_LABEL: Record<string, string> = {
-  BREAKFAST: 'Desayuno',
-  LUNCH: 'Almuerzo',
-  DINNER: 'Cena',
-}
-
-const MEAL_COLOR: Record<string, string> = {
-  BREAKFAST: 'bg-amber-100 text-amber-700',
-  LUNCH: 'bg-green-100 text-green-700',
-  DINNER: 'bg-indigo-100 text-indigo-700',
-}
+import { MEAL_LABEL, MEAL_COLOR } from '@/features/recipes/constants'
 
 export default function RecetaDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
